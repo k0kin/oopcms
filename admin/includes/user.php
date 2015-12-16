@@ -53,6 +53,19 @@ class User
 
 	}
 
+	public static function verifyUser($username,$password)
+	{
+		global $database;
+		$username = $database->escapeString($username);
+		$password = $database->escapeString($password);
+		$sql =  "SELECT * FROM users WHERE ";
+		$sql .= "username ='{$username}' ";
+		$sql .= "AND password ='{$password}' ";
+		$sql .= "LIMIT 1";
+		$theResultArray = self::findThisQuery($sql); 
+		return !empty($theResultArray) ? array_shift($theResultArray) : false;
+	}
+
 	public static function instantiation($foundUser)
 	{
         $theObject = new self;
