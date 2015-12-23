@@ -40,7 +40,10 @@ class Database {
 
 	public function theInsertId(){
 		return $this->connection->insert_id;
+		//return mysqli_insert_id($this->connection);
 	}
+
+
 
 
 

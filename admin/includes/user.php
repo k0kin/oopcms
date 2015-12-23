@@ -95,6 +95,29 @@ class User
 	}
 
 
+	public function create()
+	{
+		global $database;
+
+		$sql = "INSERT INTO users(username,password,first_name,last_name)";
+		$sql .= "VALUES ('";
+		$sql .= $database->escapeString($this->username) . "','";
+		$sql .= $database->escapeString($this->password) . "','";
+		$sql .= $database->escapeString($this->firstName) . "','";
+		$sql .= $database->escapeString($this->lastName) . "')";
+		
+		if ($database->query($sql)) 
+		{
+			$this->id = $database->theInsertId();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
 } //Termina la clase
 
  ?>
