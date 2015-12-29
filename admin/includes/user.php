@@ -117,6 +117,32 @@ class User
 		}
 	}
 
+	public function update()
+	{
+		global $database;
+
+		$sql = "UPDATE users SET ";
+		$sql .= "username= '" . $database->escapeString($this->username) . "', ";
+		$sql .= "password= '" . $database->escapeString($this->password) . "', ";
+		$sql .= "first_name= ' " . $database->escapeString($this->firstName) . " ', ";
+		$sql .= "last_name= '" . $database->escapeString($this->lastName) . "' ";
+		$sql .= " WHERE id= " . $database->escapeString($this->id);
+
+		$database->query($sql);
+
+
+		return (mysqli_affected_rows($database->connection) == 1) ? true : false;
+	}
+
+	public function delete()
+	{
+		global $database;
+
+		$sql ="DELETE FROM users WHERE id=".  $database->escapeString($this->id);
+		$database->query($sql);
+		return (mysqli_affected_rows($database->connection) == 1) ? true : false;
+	}
+
 
 } //Termina la clase
 
