@@ -5,11 +5,13 @@
 */
 class User 
 {
+	protected static $db_table ="users";
+	protected static $dbTableFields = array('username' , 'password' , 'first_name' , 'last_name');
 	public $id;
 	public $username;
 	public $password;
-	public $firstName;
-	public $lastName;
+	public $first_name;
+	public $last_name;
 
 
 	public static function findAllUsers()
@@ -74,8 +76,8 @@ class User
         // $user->id = $foundUser['id'];
         // $user->username = $foundUser['username'];
         // $user->password = $foundUser['password'];
-        // $user->firstName = $foundUser['first_name'];
-        // $user->lastName = $foundUser['last_name'];		
+        // $user->first_name = $foundUser['first_name'];
+        // $user->last_name = $foundUser['last_name'];		
 
         foreach ($foundUser as $theAttribute => $value) 
         {
@@ -94,17 +96,49 @@ class User
 
 	}
 
+	protected function properties()
+	{
+		// return get_object_vars($this);
+
+		$properties = array();
+
+		foreach (self::$dbTableFields as $dbFields ) 
+		{
+			if (property_exists($this, $dbFields)) 
+			{
+				$properties[$dbFields] = $this->$dbFields;
+			}
+		}
+
+		return $properties;
+	}
+
+	public function save()
+	{
+		return isset($this->id) ? $this->update() : $this->create();
+	}
+
 
 	public function create()
 	{
 		global $database;
 
-		$sql = "INSERT INTO users(username,password,first_name,last_name)";
-		$sql .= "VALUES ('";
-		$sql .= $database->escapeString($this->username) . "','";
-		$sql .= $database->escapeString($this->password) . "','";
-		$sql .= $database->escapeString($this->firstName) . "','";
-		$sql .= $database->escapeString($this->lastName) . "')";
+		$properties = $this->properties();
+		$keys = implode(",",array_keys($properties));
+		$values = implode("','",array_values($properties));
+		// var_dump($keys);
+		// echo "<br>";
+		// var_dump($values);
+
+		// $sql = "INSERT INTO " .self::$db_table . " (username,password,first_name,last_name)";
+		$sql = "INSERT INTO " . self::$db_table . " (" . $keys .")";
+		// $sql .= "VALUES ('";
+		// $sql .= $database->escapeString($this->username) . "','";
+		// $sql .= $database->escapeString($this->password) . "','";
+		// $sql .= $database->escapeString($this->first_name) . "','";
+		// $sql .= $database->escapeString($this->last_name) . "')";
+
+		$sql .= "VALUES ('".  $values  ."')";
 		
 		if ($database->query($sql)) 
 		{
@@ -121,11 +155,11 @@ class User
 	{
 		global $database;
 
-		$sql = "UPDATE users SET ";
+		$sql = "UPDATE " .self::$db_table . " SET ";
 		$sql .= "username= '" . $database->escapeString($this->username) . "', ";
 		$sql .= "password= '" . $database->escapeString($this->password) . "', ";
-		$sql .= "first_name= ' " . $database->escapeString($this->firstName) . " ', ";
-		$sql .= "last_name= '" . $database->escapeString($this->lastName) . "' ";
+		$sql .= "first_name= ' " . $database->escapeString($this->first_name) . " ', ";
+		$sql .= "last_name= '" . $database->escapeString($this->last_name) . "' ";
 		$sql .= " WHERE id= " . $database->escapeString($this->id);
 
 		$database->query($sql);
@@ -138,7 +172,7 @@ class User
 	{
 		global $database;
 
-		$sql ="DELETE FROM users WHERE id=".  $database->escapeString($this->id);
+		$sql ="DELETE FROM " .self::$db_table . " WHERE id=".  $database->escapeString($this->id);
 		$database->query($sql);
 		return (mysqli_affected_rows($database->connection) == 1) ? true : false;
 	}

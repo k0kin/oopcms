@@ -13,20 +13,29 @@
                            
                          // $user = new User();
                          // $user->username = "erick";
-                         // $user->password = "floress";
+                         // $user->password = "flores";
                          // $user->firstName = "erickss";
                          // $user->lastName = "floresss"; 
 
                          // $user->create(); 
                          // echo $user->id; 
-                             
+
                         // $user = User::findUserById(6);
-                        // $user->lastName = 'Williams';
-                        // $user->firstName = 'Joaquin';
+                        // $user->lastName = 'Williamss';
+                        // $user->firstName = 'Joaquins';
                         // $user->update();
 
-                        // $user = User::findUserById(1);
+                        // $user = User::findUserById(11);
                         // $user->delete();
+
+                        // $user = User::findUserById(5);
+                        // $user->username = "wtvs";
+                        // $user->save();
+
+                        // $user = new User();
+                        // $user->first_name = "s 40ss00";
+                        // $user->save();
+
 
 
 
